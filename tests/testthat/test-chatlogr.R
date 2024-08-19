@@ -1,0 +1,85 @@
+library(testthat)
+library(chatlogr)
+library(tibble)
+library(readr)
+
+
+test_that("chatlogr functions work", {
+
+    dat <- tibble(x = 1:5, xy = 1:5, y = 1:5, z = 1:5)
+
+    expect_length(get_matching_col_names(dat, c("x")), 2)
+    expect_length(get_matching_col_names(dat, c("x", "x")), 2)
+    expect_length(get_matching_col_names(dat, c("x", "y")), 3)
+    expect_length(get_matching_col_names(dat, c("x", "y", "z")), 4)
+    expect_length(get_matching_col_names(dat, "z"), 1)
+    expect_length(get_matching_col_names(dat, c("z", "z", "x", "x")), 3)
+
+    expect_s3_class(get_available_df_columns(dat, c("x")), "data.frame")
+    expect_length(get_available_df_columns(dat, c("x")), 1)
+    expect_length(get_available_df_columns(dat, c("x", "xy")), 2)
+    expect_length(get_available_df_columns(dat, c("x", "y")), 2)
+    expect_length(get_available_df_columns(dat, c("x", "y", "z")), 3)
+    expect_length(get_available_df_columns(dat, c("x", "y", "z", "z")), 3)
+
+})
+
+
+test_that("works with actual data", {
+    skip_if_not(check_if_file_exist())
+    csv_file <- file.path(system.file("extdata", package = "chatlogr"), "qualtrics.csv")
+
+
+    csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
+    expect_s3_class(read_relevant_data_columns(csv_file, "hp", "mpg", "mpg"), "data.frame")
+    expect_length(read_relevant_data_columns(csv_file, "hp", "mpg", "mpg"), 2)
+    expect_length(read_relevant_data_columns(csv_file, "hp", "mpg", "cyl"), 3)
+    expect_length(read_relevant_data_columns(csv_file, "hp", c("mpg"), c("cyl", "gear")), 4)
+    expect_length(read_relevant_data_columns(csv_file, "hp", c("mpg", "x"), c("cyl", "gear", "x")), 4)
+    expect_length(read_relevant_data_columns(csv_file, "hp", c("mpg", "x", "vs"), c("cyl", "gear", "x")), 5)
+    expect_length(read_relevant_data_columns(csv_file, "hp", c("mpg", "x", "vs"), c("cyl", "gear", "x", "gear")), 5)
+    expect_length(read_relevant_data_columns(csv_file, "hp", c("mpg", "x", "vs", "mpg"), c("cyl", "gear", "x", "gear")), 5)
+    expect_error(read_relevant_data_columns(csv_file, c("a", "b", "c"), "mpg", "cyl"))
+
+    user_chat_data <- read_relevant_data_columns(csv_file, "vs", "mpg", "cyl")[1, ]
+    expect_type(parse_user_chat_data(user_chat_data, "vs", '\"\"'), "list")
+    expect_match(parse_user_chat_data(user_chat_data, "vs", '\"\"')$status, "error")
+
+    dat <- read_relevant_data_columns(csv_file, "ResponseId", "chathistory")
+
+    # single single data
+    user_chat_data <- dat[sample(1:100, 1), ]
+    user_chat_data <- user_chat_data[-1]
+    obj <- parse_user_chat_data(user_chat_data, "test_id")
+    expect_s3_class(obj$messages, "data.frame")
+    expect_true(grepl("error", obj$status) | grepl("success", obj$status))
+    expect_true(obj$user_id == "test_id")
+    expect_true(all(c("messages", "status", "user_id") %in% names(obj)))
+
+    # multiple users' data
+    obj <- parse_users_chat_data(csv_file, idcol = "user_id", nrows = sample(5:20, 1), verbose = F)
+    expect_type(obj, "list")
+    expect_type(obj$info, 'integer')
+    expect_s3_class(obj$info_df, "data.frame")
+    expect_type(obj$json_list, "list")
+    expect_s3_class(obj$df_success, "data.frame")
+    expect_s3_class(obj$df_fail, "data.frame")
+
+    expect_true(length(unique(obj$df_success$user_id)) + length(unique(obj$df_fail$user_id)) ==
+                    length(unique(obj$info_df$user_id)))
+
+    expect_true(length(unique(obj$df_success$user_id)) == obj$info['success'])
+    expect_true(length(unique(obj$df_fail$user_id)) == obj$info['total'] - obj$info['success'])
+
+    # view chat data
+    chatdata <- parse_users_chat_data(csv_file, idcol = 'user_id', nrows = sample(5:20, 1), verbose = F)
+
+    expect_true(length(get_success_ids(chatdata)) >= 0)
+    expect_true(length(get_failed_ids(chatdata)) >= 0)
+    expect_error(get_user_chat(chatdata, "dsfdsfa"))
+
+    expect_error(write_to_json(mtcars, "mtcars"))
+    expect_error(write_to_csv(mtcars, "mtcars"))
+
+
+})
