@@ -5,4 +5,5 @@
 
 R/scratch.R
 inst/extdata/qualtrics.csv
+inst/extdata/qualtrics_old.csv
 docs
