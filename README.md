@@ -9,10 +9,9 @@
 <!-- badges: end -->
 
 `chatlogr` helps your parse data from chatbot data. The main function is
-`parse_users_chat_data()` which parses chat history data from a CSV
-file. See
-[https://hauselin.github.io/chatlogr](https://hauselin.github.io/chatlogr/)
-for details.
+[`parse_users_chat_data()`](https://hauselin.github.io/chatlogr/reference/parse_users_chat_data.html)
+which parses chat history data from a CSV file. See
+[documentation](https://hauselin.github.io/chatlogr/) for details.
 
 ## Installation
 
