@@ -1,8 +1,4 @@
-url: https://hauselin.github.io/chatlogr
-
-home:
-    title: Chat Log R Library
-    description: Parse chat logs in R.
+url: https://hauselin.github.io/chatlogr/
 
 template:
   bootstrap: 5

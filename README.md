@@ -4,6 +4,8 @@
 # chatlogr
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/hauselin/chatlogr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hauselin/chatlogr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of chatlogr is to …
