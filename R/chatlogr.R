@@ -135,7 +135,15 @@ parse_user_chat_data <- function(user_chat_data, user_id, join_str = '\"\"', ver
 #' @importFrom stringr str_count
 #' @importFrom tibble tibble
 #'
-#' @return List with info, info_df, json_list, df_success, df_fail keys.
+#' @return A list with the following keys:
+#' \describe{
+#'   \item{info}{A vector indicating total number of rows processed, number of success/error/warning parses.}
+#'   \item{info_df}{A dataframe/tibble with info on each user's chat data, where the status column indicates parsing status and mobile column indicates mobile (1) or not (0).}
+#'   \item{json_list}{A list of JSON data for each user. Contains full data and can be a very large list.}
+#'   \item{df_success}{A dataframe/tibble with successful parses. Contains only chat messages and not other data.}
+#'   \item{df_fail}{A dataframe/tibble with failed parses. Contains only chat messages and not other data.}
+#' }
+#'
 #' @export
 #'
 #' @examples

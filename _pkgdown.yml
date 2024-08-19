@@ -9,3 +9,28 @@ template:
     twitter:
       site: "@hauselin"
       creator: "@hauselin"
+
+
+
+reference:
+  - title: Ollamar functions
+
+  - subtitle: Parse and view data
+    desc: Functions to parse and view data
+    contents:
+      - parse_users_chat_data
+      - parse_user_chat_data
+      - get_user_chat
+      - get_success_ids
+      - get_failed_ids
+
+  - subtitle: Save data
+    desc: Functions to save data
+    contents:
+      - write_to_json
+      - write_to_csv
+
+  - subtitle: Utility functions
+    desc: Utility functions
+    contents:
+      - read_relevant_data_columns
