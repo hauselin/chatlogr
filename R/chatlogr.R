@@ -179,6 +179,7 @@ parse_users_chat_data <- function(csv_file,
         user_chat_data <- dat[i, chat_cols]
 
         tryCatch({
+            id <- status <- role <- NULL
             # parse user data; convert from string to json
             json_obj <- parse_user_chat_data(user_chat_data, user_id, join_str, verbose)
             mobile <- 0
@@ -187,8 +188,7 @@ parse_users_chat_data <- function(csv_file,
             }
             temp_info <- data.frame(json_obj$user_id,
                                     json_obj$status,
-                                    mobile
-                                    )
+                                    mobile)
             colnames(temp_info) <- c(idcol, "status", "mobile")
             json_objects[[user_id]] <- json_obj
 
