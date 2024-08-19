@@ -61,22 +61,129 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of chatlogr is to …</p>
+<p><code>chatlogr</code> helps your parse data from chatbot data. The main function is <code><a href="reference/parse_users_chat_data.html">parse_users_chat_data()</a></code> which parses chat history data from a CSV file.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of chatlogr from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Install the development version of <code>chatlogr</code>. You might need to install the <code>remotes</code> package first.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>  <span class="co"># if remotes package not already installed</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"hauselin/chatlogr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hauselin/chatlogr" class="external-link">chatlogr</a></span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># datafile is "data.csv"</span></span>
+<span><span class="co"># unique id column is ResponseId</span></span>
+<span><span class="co"># chat history columns contain "chathistory"</span></span>
+<span><span class="co"># parse 10 (random) rows</span></span>
+<span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span></span>
+<span>    <span class="st">"data.csv"</span>, </span>
+<span>    idcol <span class="op">=</span> <span class="st">"ResponseId"</span>, </span>
+<span>    chat_col_patterns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory"</span><span class="op">)</span>, </span>
+<span>    nrows <span class="op">=</span> <span class="fl">10</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="co"># Sampling 10 rows...                                                                      </span></span>
+<span><span class="co"># Processing 10 rows...</span></span>
+<span><span class="co"># Parsing summary/status</span></span>
+<span><span class="co">#    total  success   errors warnings </span></span>
+<span><span class="co">#       10        7        3        0 </span></span>
+<span></span>
+<span><span class="co"># get successfully parsed userids</span></span>
+<span><span class="fu"><a href="reference/get_success_ids.html">get_success_ids</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># get failed userids</span></span>
+<span><span class="fu"><a href="reference/get_failed_ids.html">get_failed_ids</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># get chat history for a specific user</span></span>
+<span><span class="fu"><a href="reference/get_user_chat.html">get_user_chat</a></span><span class="op">(</span><span class="va">chatdata</span>, <span class="st">"R_7PQRDkwCKlhLGhP"</span><span class="op">)</span></span>
+<span><span class="co"># prints chat history for user with id "R_7PQRDkwCKlhLGhP"</span></span>
+<span><span class="co"># returns a tibble dataframe for this user</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="parse-with-parse_users_chat_data">Parse with <code>parse_users_chat_data()</code>
+<a class="anchor" aria-label="anchor" href="#parse-with-parse_users_chat_data"></a>
+</h2>
+<p>Parse a raw CSV file downloaded from Qualtrics with the <code><a href="reference/parse_users_chat_data.html">parse_users_chat_data()</a></code> function.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">csv_file</span> <span class="op">&lt;-</span> <span class="st">"qualtrics_data.csv"</span></span>
+<span><span class="co"># see doc for default parameter values</span></span>
+<span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span><span class="va">csv_file</span><span class="op">)</span> </span>
+<span><span class="co"># returns a list</span></span>
+<span><span class="co"># Processing 150 rows...                                                                   </span></span>
+<span><span class="co"># Parsing summary/status</span></span>
+<span><span class="co">#    total  success   errors warnings </span></span>
+<span><span class="co">#      150      122       28        0 </span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
+<span><span class="co"># keys in the list</span></span>
+<span><span class="co"># [1] "info"       "info_df"    "json_list"  "df_success" "df_fail"   </span></span>
+<span></span>
+<span><span class="co"># summary of parsing results</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">info</span></span>
+<span><span class="co"># total  success   errors warnings </span></span>
+<span><span class="co">#   150      122       28        0 </span></span>
+<span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">info_df</span></span>
+<span><span class="co"># tibble dataframe with status column indicating parsing success or failure</span></span>
+<span><span class="co"># mobile column indicates mobile (1) or not ()</span></span>
+<span><span class="co"># A tibble: 150 × 3</span></span>
+<span><span class="co">#   ResponseId                     status                       mobile</span></span>
+<span><span class="co">#   &lt;chr&gt;                          &lt;chr&gt;                         &lt;dbl&gt;</span></span>
+<span><span class="co"># 1 "Response ID"                  error: json validation error      0</span></span>
+<span><span class="co"># 2 "{\"ImportId\":\"_recordId\"}" error: json validation error      0</span></span>
+<span><span class="co"># ...</span></span>
+<span></span>
+<span><span class="co"># large list object containing parsed JSON data</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">json_list</span>  </span>
+<span></span>
+<span><span class="co"># tibble dataframe with successfully parsed chat history</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">df_success</span>  </span>
+<span><span class="co"># A tibble: 1,103 × 6</span></span>
+<span><span class="co">#    ResponseId        role      content                            createdAt    id n_words</span></span>
+<span><span class="co">#    &lt;chr&gt;             &lt;chr&gt;     &lt;chr&gt;                                  &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;</span></span>
+<span><span class="co">#  1 R_6CTNF27UPvt8oKX system    "You are an engaging and persuasi…      0        0     344</span></span>
+<span><span class="co">#  2 R_6CTNF27UPvt8oKX user      "The issue of 'Role of federal go…      0.1      1      95</span></span>
+<span><span class="co">#  3 R_6CTNF27UPvt8oKX assistant "It’s great that you’re thinking …      1.99     2     477</span></span>
+<span><span class="co">#  4 R_6CTNF27UPvt8oKX user      "thank you for explaining"             42.9      3       4</span></span>
+<span></span>
+<span><span class="co"># tibble dataframe with failed parsing</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">df_fail</span> </span>
+<span><span class="co"># # A tibble: 28 × 6</span></span>
+<span><span class="co">#    ResponseId                     role  content                   createdAt    id n_words</span></span>
+<span><span class="co">#    &lt;chr&gt;                          &lt;chr&gt; &lt;chr&gt;                         &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;</span></span>
+<span><span class="co">#  1 "Response ID"                  NA    "Chat history will be sa…        NA    NA     315</span></span>
+<span><span class="co">#  2 "{\"ImportId\":\"_recordId\"}" NA    "{\"ImportId\":\"QID84_T…        NA    NA      10</span></span>
+<span><span class="co">#  3 "R_6Oxfp8hPdB4oOJQ"            NA    ""                               NA    NA       0</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="parsing-parameters">Parsing parameters<a class="anchor" aria-label="anchor" href="#parsing-parameters"></a>
+</h3>
+<p>The <code><a href="reference/parse_users_chat_data.html">parse_users_chat_data()</a></code> function has several parameters that can be adjusted to suit the specific format of the chat data.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span></span>
+<span>    <span class="va">csv_file</span>,  <span class="co"># path to CSV file</span></span>
+<span>    idcol <span class="op">=</span> <span class="st">"your_unique_ID_column"</span>, </span>
+<span>    chat_col_patterns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory"</span><span class="op">)</span>, <span class="co"># get columns with names containing this pattern</span></span>
+<span>    chat_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory00"</span>, <span class="st">"chathistory01"</span><span class="op">)</span>,  <span class="co"># specify exact column names to parse</span></span>
+<span>    nrows <span class="op">=</span> <span class="fl">10</span>  <span class="co"># no. of rows to read (for debugging)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="saving-data">Saving data<a class="anchor" aria-label="anchor" href="#saving-data"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># save the full chatdata object to a JSON file</span></span>
+<span><span class="co"># chatdata is the list object returned by parse_users_chat_data()</span></span>
+<span><span class="co"># save the FULL chatdata object to a JSON file</span></span>
+<span><span class="fu"><a href="reference/write_to_json.html">write_to_json</a></span><span class="op">(</span><span class="va">chatdata</span>, <span class="st">"chatdata.json"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># save the successfully parsed chat history to a CSV file</span></span>
+<span><span class="co"># chatdata is the list object returned by parse_users_chat_data()</span></span>
+<span><span class="co"># saves only the chat history data to a CSV file</span></span>
+<span><span class="fu"><a href="reference/write_to_csv.html">write_to_csv</a></span><span class="op">(</span><span class="va">chatdata</span>, <span class="st">"chathistory.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

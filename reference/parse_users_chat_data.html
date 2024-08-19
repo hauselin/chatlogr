@@ -89,8 +89,23 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>List with info, info_df, json_list, df_success, df_fail keys.</p>
-    </div>
+    <p>A list with the following keys:</p><dl><dt>info</dt>
+<dd><p>A vector indicating total number of rows processed, number of success/error/warning parses.</p></dd>
+
+  <dt>info_df</dt>
+<dd><p>A dataframe/tibble with info on each user's chat data, where the status column indicates parsing status and mobile column indicates mobile (1) or not (0).</p></dd>
+
+  <dt>json_list</dt>
+<dd><p>A list of JSON data for each user. Contains full data and can be a very large list.</p></dd>
+
+  <dt>df_success</dt>
+<dd><p>A dataframe/tibble with successful parses. Contains only chat messages and not other data.</p></dd>
+
+  <dt>df_fail</dt>
+<dd><p>A dataframe/tibble with failed parses. Contains only chat messages and not other data.</p></dd>
+
+
+</dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
