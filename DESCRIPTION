@@ -19,3 +19,5 @@ Imports:
     stringr,
     tibble,
     yyjsonr
+URL: https://github.com/hauselin/chatlogr
+BugReports: https://github.com/hauselin/chatlogr/issues
