@@ -92,10 +92,27 @@ parse_user_chat_data <- function(user_chat_data, user_id, join_str = '\"\"', ver
     }
 
     if (length(user_data_list) == 1) {
-        json_obj <- yyjsonr::read_json_str(yyjsonr::read_json_str(user_data_list[[1]]))
-        json_obj$messages <- tibble::tibble(json_obj$messages)
-        json_obj$status <- "success"
+        json_obj <- list()
+        if (yyjsonr::validate_json_str(user_data_list[[1]])) {
+            json_obj0 <- yyjsonr::read_json_str(user_data_list[[1]])
+            if (is.data.frame(json_obj0)) {  # old format with just chat history (no parameters)
+                json_obj$messages <- tibble::tibble(json_obj0)
+                json_obj$status <- "success"
+            } else {  # new format with chat history and other parameters
+                json_obj <- yyjsonr::read_json_str(json_obj0)
+                json_obj$messages <- tibble::tibble(json_obj$messages)
+                json_obj$status <- "success"
+            }
+        } else {
+            json_obj <- list(status = "error: json validation error")
+            json_obj$messages <- tibble::tibble(
+                role = NA,
+                content = user_data_list[[1]],
+                createdAt = NA,
+                id = NA)
+        }
     } else {
+        # concatenate all cells
         user_data_string <- paste0(user_data_list, collapse = "")
         user_data_string <- gsub(join_str, "", user_data_string)
         if (yyjsonr::validate_json_str(user_data_string)) {
@@ -190,7 +207,7 @@ parse_users_chat_data <- function(csv_file,
             id <- status <- role <- NULL
             # parse user data; convert from string to json
             json_obj <- parse_user_chat_data(user_chat_data, user_id, join_str, verbose)
-            mobile <- 0
+            mobile <- NA
             if (!is.null(json_obj$userAgentInfo$mobile)) {
                 mobile <- ifelse(json_obj$userAgentInfo$mobile, 1, 0)
             }

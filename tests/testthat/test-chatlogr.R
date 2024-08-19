@@ -27,8 +27,6 @@ test_that("chatlogr functions work", {
 
 test_that("works with actual data", {
     skip_if_not(check_if_file_exist())
-    csv_file <- file.path(system.file("extdata", package = "chatlogr"), "qualtrics.csv")
-
 
     csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
     expect_s3_class(read_relevant_data_columns(csv_file, "hp", "mpg", "mpg"), "data.frame")
