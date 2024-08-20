@@ -276,7 +276,7 @@ parse_users_chat_data <- function(csv_file,
 #' write_to_json(chatdata, "chatdata.json")
 #' }
 write_to_json <- function(chatdata, output_file) {
-    if (!grepl(".csv$", output_file)) {
+    if (!grepl(".json$", output_file)) {
         stop("output_file must end with '.json'")
     }
     message(paste0("Writing all chat data to ", output_file))

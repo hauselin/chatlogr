@@ -1,5 +1,9 @@
 # chatlogr (development version)
 
+# chatlogr 0.0.0.9001
+
+- Fix typo in `write_to_json()` function. 
+
 # chatlogr 0.0.0.9000
 
 ## New features
