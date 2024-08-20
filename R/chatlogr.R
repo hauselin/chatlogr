@@ -214,13 +214,15 @@ parse_users_chat_data <- function(csv_file,
     }
     message(paste0("Processing ", nrow(dat), " rows..."))
 
+    chat_cols <- sort(setdiff(colnames(dat), idcol))  # remove idcol
+    message(paste0("Chat columns: ", paste0(chat_cols, collapse = ", ")))
+
     json_objects <- list()
     dataframe_list <- list()
     info <- list(success = list(), errors = list(), warnings = list())
 
     for (i in 1:nrow(dat)) {
         user_id <- dat[i, idcol, drop = TRUE]
-        chat_cols <- setdiff(colnames(dat), idcol)  # remove idcol
         user_chat_data <- dat[i, chat_cols]
 
         tryCatch({
@@ -264,7 +266,7 @@ parse_users_chat_data <- function(csv_file,
     info_summary <- c(total = nrow(dat), info_summary)
     df_summary <- tibble::tibble(dplyr::arrange(dplyr::bind_rows(lapply(info, dplyr::bind_rows)), status))
     df0 <- dplyr::select(dplyr::bind_rows(dataframe_list), dplyr::all_of(idcol), dplyr::everything())
-    message("Parsing summary/status")
+    message("Parsing summary")
     print(info_summary)
 
     return(list(info = info_summary,

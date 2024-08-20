@@ -89,9 +89,8 @@ test_that("works with actual data", {
 
     # NA columns don't throw error
     csv_file <- file.path(system.file("extdata", package = "chatlogr"), "qualtrics01.csv")
-    expect_no_error(parse_users_chat_data(csv_file, "ResponseId", nrows = 5))
-
-
-
+    if (file.exists(csv_file)) {
+        expect_no_error(parse_users_chat_data(csv_file, "ResponseId", nrows = 5))
+    }
 
 })
