@@ -166,13 +166,12 @@
 </h3>
 <p>The <code><a href="reference/parse_users_chat_data.html">parse_users_chat_data()</a></code> function has several parameters that can be adjusted to suit the specific format of the chat data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span></span>
 <span>    <span class="va">csv_file</span>,  <span class="co"># path to CSV file</span></span>
 <span>    idcol <span class="op">=</span> <span class="st">"your_unique_ID_column"</span>, </span>
 <span>    chat_col_patterns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory"</span><span class="op">)</span>, <span class="co"># get columns with names containing this pattern</span></span>
 <span>    chat_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory00"</span>, <span class="st">"chathistory01"</span><span class="op">)</span>,  <span class="co"># specify exact column names to parse</span></span>
-<span>    nrows <span class="op">=</span> <span class="fl">10</span>  <span class="co"># no. of rows to read (for debugging)</span></span>
+<span>    nrows <span class="op">=</span> <span class="fl">10</span>  <span class="co"># rows to read (for debugging/testing initially)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -180,14 +179,12 @@
 <h2 id="saving-data">Saving data<a class="anchor" aria-label="anchor" href="#saving-data"></a>
 </h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># save the full chatdata object to a JSON file</span></span>
-<span><span class="co"># chatdata is the list object returned by parse_users_chat_data()</span></span>
-<span><span class="co"># save the FULL chatdata object to a JSON file</span></span>
+<code class="sourceCode R"><span><span class="co"># chatdata is the list returned by parse_users_chat_data()</span></span>
+<span><span class="co"># save the FULL chatdata object (with extra parameters) to JSON file</span></span>
 <span><span class="fu"><a href="reference/write_to_json.html">write_to_json</a></span><span class="op">(</span><span class="va">chatdata</span>, <span class="st">"chatdata.json"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># save the successfully parsed chat history to a CSV file</span></span>
-<span><span class="co"># chatdata is the list object returned by parse_users_chat_data()</span></span>
-<span><span class="co"># saves only the chat history data to a CSV file</span></span>
+<span><span class="co"># chatdata is the list returned by parse_users_chat_data()</span></span>
+<span><span class="co"># saves ONLY CHAT MESSAGES/HISTORY to CSV file</span></span>
 <span><span class="fu"><a href="reference/write_to_csv.html">write_to_csv</a></span><span class="op">(</span><span class="va">chatdata</span>, <span class="st">"chathistory.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
