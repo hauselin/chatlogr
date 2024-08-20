@@ -1,4 +1,4 @@
-# chatlogr (development version)
+# chatlogr 0.0.1
 
 # chatlogr 0.0.0.9001
 
