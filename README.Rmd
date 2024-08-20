@@ -126,13 +126,12 @@ chatdata$df_fail
 The `parse_users_chat_data()` function has several parameters that can be adjusted to suit the specific format of the chat data. 
 
 ```{r eval=FALSE}
-
 parse_users_chat_data(
     csv_file,  # path to CSV file
     idcol = "your_unique_ID_column", 
     chat_col_patterns = c("chathistory"), # get columns with names containing this pattern
     chat_cols = c("chathistory00", "chathistory01"),  # specify exact column names to parse
-    nrows = 10  # no. of rows to read (for debugging)
+    nrows = 10  # rows to read (for debugging/testing initially)
 )
 
 ```
@@ -140,14 +139,12 @@ parse_users_chat_data(
 ## Saving data
 
 ```{r eval=FALSE}
-# save the full chatdata object to a JSON file
-# chatdata is the list object returned by parse_users_chat_data()
-# save the FULL chatdata object to a JSON file
+# chatdata is the list returned by parse_users_chat_data()
+# save the FULL chatdata object (with extra parameters) to JSON file
 write_to_json(chatdata, "chatdata.json")
 
-# save the successfully parsed chat history to a CSV file
-# chatdata is the list object returned by parse_users_chat_data()
-# saves only the chat history data to a CSV file
+# chatdata is the list returned by parse_users_chat_data()
+# saves ONLY CHAT MESSAGES/HISTORY to CSV file
 write_to_csv(chatdata, "chathistory.csv")
 ```
 
