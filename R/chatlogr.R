@@ -391,21 +391,22 @@ get_user_chat <- function(chatdata, user_id = NULL, random_user = FALSE) {
 
     if (nrow(chathistory) == 0) {
         message(paste0("No chat history for user ", user_id))
-    } else {
-        message(paste0("Chat history for user ", user_id, "\n--------------------"))
-        for (i in 1:nrow(chathistory)) {
-            role <- chathistory[i, ]$role
-            role <- paste0(role, " (", chathistory[i,]$n_words, " words)")
-            content <- chathistory[i,]$content
-            if (grepl("system", role)) {
-                cat(crayon::red(paste0(role, ": ", content, "\n\n")))
-            } else if (grepl("ai", role) | grepl("assistant", role)) {
-                cat(crayon::green(paste0(role, ": ", content, "\n\n")))
-            } else {
-                cat(paste0(role, ": ", content, "\n\n"))
-            }
-        }
-        cat("--------------------\n")
+        return(chathistory)
     }
+
+    message(paste0("Chat history for user ", user_id, "\n--------------------"))
+    for (i in 1:nrow(chathistory)) {
+        role <- chathistory[i, ]$role
+        role <- paste0(role, " (", chathistory[i,]$n_words, " words)")
+        content <- chathistory[i,]$content
+        if (grepl("system", role)) {
+            cat(crayon::red(paste0(role, ": ", content, "\n\n")))
+        } else if (grepl("ai", role) | grepl("assistant", role)) {
+            cat(crayon::green(paste0(role, ": ", content, "\n\n")))
+        } else {
+            cat(paste0(role, ": ", content, "\n\n"))
+        }
+    }
+    cat("--------------------\n")
     return(chathistory)
 }
