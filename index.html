@@ -79,21 +79,31 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hauselin/chatlogr" class="external-link">chatlogr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># parse data</span></span>
-<span><span class="co"># datafile is "data.csv"</span></span>
-<span><span class="co"># unique id column is ResponseId</span></span>
-<span><span class="co"># chat history columns contain "chathistory"</span></span>
-<span><span class="co"># parse 10 (random) rows</span></span>
 <span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span></span>
-<span>    <span class="st">"data.csv"</span>, </span>
-<span>    idcol <span class="op">=</span> <span class="st">"ResponseId"</span>, </span>
-<span>    chat_col_patterns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory"</span><span class="op">)</span>, </span>
-<span>    nrows <span class="op">=</span> <span class="fl">10</span></span>
+<span>    <span class="st">"data.csv"</span>,  <span class="co"># data file</span></span>
+<span>    idcol <span class="op">=</span> <span class="st">"ResponseId"</span>,  <span class="co"># unique id column in data</span></span>
+<span>    chat_col_patterns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory"</span><span class="op">)</span>,  <span class="co"># columns containing chat history</span></span>
+<span>    nrows <span class="op">=</span> <span class="fl">10</span>  <span class="co"># number of rows to parse (fewer for debugging/testing)</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="co"># Sampling 10 rows...                                                                      </span></span>
 <span><span class="co"># Processing 10 rows...</span></span>
 <span><span class="co"># Parsing summary/status</span></span>
 <span><span class="co">#    total  success   errors warnings </span></span>
 <span><span class="co">#       10        7        3        0 </span></span>
+<span></span>
+<span><span class="co"># more info about parsing status</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">info</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">info_df</span></span>
+<span></span>
+<span><span class="co"># get successfully parsed chat messages/history</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">df_success</span></span>
+<span></span>
+<span><span class="co"># get rows that cannot be parsed</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">df_fail</span></span>
+<span></span>
+<span><span class="co"># get full json object</span></span>
+<span><span class="co"># contains all data (including chat data like thumbs up/down, highlights, user-agent info)</span></span>
+<span><span class="va">chatdata</span><span class="op">$</span><span class="va">json</span></span>
 <span></span>
 <span><span class="co"># get successfully parsed userids</span></span>
 <span><span class="fu"><a href="reference/get_success_ids.html">get_success_ids</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
