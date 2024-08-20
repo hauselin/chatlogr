@@ -79,5 +79,12 @@ test_that("works with actual data", {
     expect_error(write_to_json(mtcars, "mtcars"))
     expect_error(write_to_csv(mtcars, "mtcars"))
 
+    # id column must be unique
+    csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
+    expect_error(parse_users_chat_data(csv_file, "vs"))
+
+    # chat columns must be character
+    expect_error(parse_users_chat_data(csv_file, "user_id", chat_cols = c("mpg")))
+
 
 })
