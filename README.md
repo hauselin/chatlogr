@@ -30,21 +30,31 @@ remotes::install_github("hauselin/chatlogr")
 library(chatlogr)
 
 # parse data
-# datafile is "data.csv"
-# unique id column is ResponseId
-# chat history columns contain "chathistory"
-# parse 10 (random) rows
 chatdata <- parse_users_chat_data(
-    "data.csv", 
-    idcol = "ResponseId", 
-    chat_col_patterns = c("chathistory"), 
-    nrows = 10
+    "data.csv",  # data file
+    idcol = "ResponseId",  # unique id column in data
+    chat_col_patterns = c("chathistory"),  # columns containing chat history
+    nrows = 10  # number of rows to parse (fewer for debugging/testing)
     )
 # Sampling 10 rows...                                                                      
 # Processing 10 rows...
 # Parsing summary/status
 #    total  success   errors warnings 
 #       10        7        3        0 
+
+# more info about parsing status
+chatdata$info
+chatdata$info_df
+
+# get successfully parsed chat messages/history
+chatdata$df_success
+
+# get rows that cannot be parsed
+chatdata$df_fail
+
+# get full json object
+# contains all data (including chat data like thumbs up/down, highlights, user-agent info)
+chatdata$json
 
 # get successfully parsed userids
 get_success_ids(chatdata)
