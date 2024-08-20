@@ -63,6 +63,7 @@ read_relevant_data_columns <- function(csv_file,
 
 
 
+
 #' Parse a single user's raw chat data
 #'
 #' @param user_chat_data Raw chat data for a single user. Must only include chat data columns.
@@ -137,6 +138,27 @@ parse_user_chat_data <- function(user_chat_data, user_id, join_str = '\"\"', ver
 
 
 
+check_unique_ids <- function(dat, idcol) {
+    if (nrow(unique(dat[, idcol])) != nrow(dat)) {
+        return(FALSE)
+    }
+    return(TRUE)
+}
+
+remove_na_chat_columns <- function(dat) {
+    n_na <- colSums(is.na(dat))
+    chat_cols <- names(n_na[n_na < nrow(dat)])
+    return(dat[, chat_cols])
+}
+
+ensure_chat_columns_are_char <- function(dat, idcol) {
+    temp <- dat[, setdiff(colnames(dat), idcol)]
+    if (!all(sapply(temp, class) == "character")) {
+        return(FALSE)
+    }
+    return(TRUE)
+}
+
 
 #' Parse all user data
 #'
@@ -176,21 +198,19 @@ parse_users_chat_data <- function(csv_file,
 
     dat <- read_relevant_data_columns(csv_file, idcol, chat_col_patterns, chat_cols)
 
-    # check if values are unique
-    if (!nrow(unique(dat[, idcol])) == nrow(dat)) {
+    if (!check_unique_ids(dat, idcol)) {
         stop("idcol must contain unique values")
     }
 
-    # check if all values are character
-    temp <- dat[, setdiff(colnames(dat), idcol)]
-    if (!all(sapply(temp, class) == "character")) {
+    dat <- remove_na_chat_columns(dat)
+
+    if (!ensure_chat_columns_are_char(dat, idcol)) {
         stop("All chat data columns must be character")
     }
 
     if (nrows != Inf) {
-        row_idx <- sample(1:nrow(dat), nrows)
-        dat <- dat[row_idx, ]
-        message(paste0("Sampling ", nrows, " rows..."))
+        dat <- dat[sample(1:nrow(dat), nrows), ]
+        message(paste0("Sampling ", nrow(dat), " rows..."))
     }
     message(paste0("Processing ", nrow(dat), " rows..."))
 

@@ -55,7 +55,7 @@ test_that("works with actual data", {
     expect_true(all(c("messages", "status", "user_id") %in% names(obj)))
 
     # multiple users' data
-    obj <- parse_users_chat_data(csv_file, idcol = "user_id", nrows = sample(5:20, 1), verbose = F)
+    obj <- parse_users_chat_data(csv_file, idcol = "user_id", nrows = 2)
     expect_type(obj, "list")
     expect_type(obj$info, 'integer')
     expect_s3_class(obj$info_df, "data.frame")
@@ -82,9 +82,16 @@ test_that("works with actual data", {
     # id column must be unique
     csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
     expect_error(parse_users_chat_data(csv_file, "vs"))
+    expect_no_error(parse_users_chat_data(csv_file, "user_id"))
 
     # chat columns must be character
-    expect_error(parse_users_chat_data(csv_file, "user_id", chat_cols = c("mpg")))
+    expect_error(parse_users_chat_data(csv_file, "user_id", chat_cols = c("gear")))
+
+    # NA columns don't throw error
+    csv_file <- file.path(system.file("extdata", package = "chatlogr"), "qualtrics01.csv")
+    expect_no_error(parse_users_chat_data(csv_file, "ResponseId", nrows = 5))
+
+
 
 
 })
