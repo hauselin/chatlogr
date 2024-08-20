@@ -17,7 +17,7 @@ get_available_df_columns <- function(dat, cols = c("chathistory00", "chathistory
 
 
 check_if_file_exist <- function() {
-    return(file.exists(file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")))
+    return(file.exists(file.path(system.file("extdata", package = "chatlogr"), "qualtrics.csv")))
 }
 
 
