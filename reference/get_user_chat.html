@@ -74,7 +74,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">csv_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"chatlogr"</span><span class="op">)</span>, <span class="st">"mtcars.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span><span class="va">csv_file</span>, <span class="st">"user_id"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Processing 32 rows...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Parsing summary/status</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chat columns: chathistory1, chathistory2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Parsing summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    total  success   errors warnings </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       32        0       32        0 </span>
 <span class="r-in"><span><span class="fu">get_user_chat</span><span class="op">(</span><span class="va">chatdata</span>, user_id <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
