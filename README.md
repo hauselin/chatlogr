@@ -26,6 +26,10 @@ remotes::install_github("hauselin/chatlogr")
 ## Usage
 
 ``` r
+# load library
+library(chatlogr)
+
+# parse data
 # datafile is "data.csv"
 # unique id column is ResponseId
 # chat history columns contain "chathistory"
