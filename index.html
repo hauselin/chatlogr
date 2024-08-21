@@ -104,14 +104,14 @@
 <span><span class="co"># contains all data (including chat data like thumbs up/down, highlights, user-agent info)</span></span>
 <span><span class="va">chatdata</span><span class="op">$</span><span class="va">json</span></span>
 <span></span>
+<span><span class="co"># get long-form chat history (success and failed) for all users</span></span>
+<span><span class="fu"><a href="reference/get_df.html">get_df</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># get successfully parsed userids</span></span>
 <span><span class="fu"><a href="reference/get_success_ids.html">get_success_ids</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># get failed userids</span></span>
 <span><span class="fu"><a href="reference/get_failed_ids.html">get_failed_ids</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># get long-form chat history (success and failed) for all users</span></span>
-<span><span class="fu"><a href="reference/get_df.html">get_df</a></span><span class="op">(</span><span class="va">chatdata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># get/view chat history for a specific a userid</span></span>
 <span><span class="fu"><a href="reference/get_user_chat.html">get_user_chat</a></span><span class="op">(</span><span class="va">chatdata</span>, <span class="st">"R_13GYa78PPEossy5"</span><span class="op">)</span>  <span class="co"># accepts chatdata from parse_users_chat_data</span></span>
@@ -132,7 +132,7 @@
 <span>    chat_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chathistory00"</span>, <span class="st">"chathistory01"</span><span class="op">)</span>,  <span class="co"># specify exact column names to parse</span></span>
 <span>    nrows <span class="op">=</span> <span class="fl">10</span>  <span class="co"># rows to read (for debugging/testing initially)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>You can parse a raw CSV file downloaded or a processed data frame that is already in R.</p>
+<p>You can read/parse a csv file or a processed dataframe that is already in R.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span>csv_file <span class="op">=</span> <span class="st">"file.csv"</span><span class="op">)</span></span>
 <span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">some_data_frame</span><span class="op">)</span></span></code></pre></div>
