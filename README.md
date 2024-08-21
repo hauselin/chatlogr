@@ -55,14 +55,14 @@ chatdata$df_fail
 # contains all data (including chat data like thumbs up/down, highlights, user-agent info)
 chatdata$json
 
+# get long-form chat history (success and failed) for all users
+get_df(chatdata)
+
 # get successfully parsed userids
 get_success_ids(chatdata)
 
 # get failed userids
 get_failed_ids(chatdata)
-
-# get long-form chat history (success and failed) for all users
-get_df(chatdata)
 
 # get/view chat history for a specific a userid
 get_user_chat(chatdata, "R_13GYa78PPEossy5")  # accepts chatdata from parse_users_chat_data
@@ -86,8 +86,8 @@ parse_users_chat_data(
 )
 ```
 
-You can parse a raw CSV file downloaded or a processed data frame that
-is already in R.
+You can read/parse a csv file or a processed dataframe that is already
+in R.
 
 ``` r
 chatdata <- parse_users_chat_data(csv_file = "file.csv")
