@@ -1,6 +1,3 @@
-#' @importFrom yyjsonr read_json_file
-NULL
-
 get_matching_col_names <- function(dat, patterns = c("chathistory")) {
     pattern <- unique(patterns)
     matched <- c()
@@ -369,6 +366,29 @@ write_to_csv <- function(chatdata, output_file) {
     readr::write_csv(df0, output_file)
     return(df0)
 }
+
+
+
+
+#' Read JSON file
+#'
+#' @param filename Path to JSON file in character.
+#' @param opts Options to pass to `yyjsonr::read_json_file`.
+#' @param ... Additional arguments to pass to `yyjsonr::read_json_file`.
+#'
+#' @description
+#' This function is imported from yyjsonr.
+#'
+#' @return A list of JSON data.
+#'
+#' @seealso [yyjsonr::read_json_file()]
+#' @examples
+#' \dontrun{
+#' read_json_file("chatdata.json")
+#' }
+#' @importFrom yyjsonr read_json_file
+#' @export
+read_json_file <- yyjsonr::read_json_file
 
 
 

@@ -26,10 +26,11 @@ reference:
       - get_failed_ids
 
   - subtitle: Save data
-    desc: Functions to save data
+    desc: Functions to save and load data
     contents:
       - write_to_json
       - write_to_csv
+      - read_json_file
 
   - subtitle: Utility functions
     desc: Utility functions
