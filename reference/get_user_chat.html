@@ -53,7 +53,7 @@
 
 
 <dl><dt id="arg-chatdata">chatdata<a class="anchor" aria-label="anchor" href="#arg-chatdata"></a></dt>
-<dd><p>Chat data from parse_users_chat_data.</p></dd>
+<dd><p>Chat data list object from parse_users_chat_data or chat history dataframe.</p></dd>
 
 
 <dt id="arg-user-id">user_id<a class="anchor" aria-label="anchor" href="#arg-user-id"></a></dt>
@@ -71,13 +71,16 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">csv_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"chatlogr"</span><span class="op">)</span>, <span class="st">"mtcars.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span><span class="va">csv_file</span>, <span class="st">"user_id"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># read and process raw data</span></span></span>
+<span class="r-in"><span><span class="va">csv_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"chatlogr"</span><span class="op">)</span>, <span class="st">"mtcars.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">chatdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="parse_users_chat_data.html">parse_users_chat_data</a></span><span class="op">(</span><span class="va">csv_file</span>, idcol <span class="op">=</span> <span class="st">"user_id"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Processing 32 rows...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Chat columns: chathistory1, chathistory2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Parsing summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    total  success   errors warnings </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       32        0       32        0 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pass in chatdata list object</span></span></span>
 <span class="r-in"><span><span class="fu">get_user_chat</span><span class="op">(</span><span class="va">chatdata</span>, user_id <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Chat history for user 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --------------------</span>
@@ -88,6 +91,19 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   user_id role  content createdAt id    n_words</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>       1 <span style="color: #BB0000;">NA</span>    ab      <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>          1</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pass in chat history dataframe</span></span></span>
+<span class="r-in"><span><span class="fu">get_user_chat</span><span class="op">(</span><span class="va">chatdata</span><span class="op">$</span><span class="va">df_success</span>, user_id <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chat history for user 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA (NA words): NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ( words): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 6 variables: user_id &lt;dbl&gt;, role &lt;lgl&gt;, content &lt;chr&gt;, createdAt &lt;lgl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   id &lt;lgl&gt;, n_words &lt;int&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

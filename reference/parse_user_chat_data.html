@@ -81,9 +81,9 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">csv_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"chatlogr"</span><span class="op">)</span>, <span class="st">"mtcars.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">user_chat_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_relevant_data_columns.html">read_relevant_data_columns</a></span><span class="op">(</span><span class="va">csv_file</span>, <span class="st">"user_id"</span>, <span class="st">"chathistory"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">user_chatdata</span> <span class="op">&lt;-</span> <span class="fu">parse_user_chat_data</span><span class="op">(</span><span class="va">user_chat_data</span>, <span class="st">"vs"</span>, join_str <span class="op">=</span> <span class="st">'\"\"'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> vs has 3 cells</span>
+<span class="r-in"><span><span class="va">user_chat_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_relevant_data_columns.html">read_relevant_data_columns</a></span><span class="op">(</span><span class="va">csv_file</span>, idcol <span class="op">=</span> <span class="st">"user_id"</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">user_chatdata</span> <span class="op">&lt;-</span> <span class="fu">parse_user_chat_data</span><span class="op">(</span><span class="va">user_chat_data</span>, user_id <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3 has 3 cells</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - status: error: json validation error</span>
 </code></pre></div>
     </div>
