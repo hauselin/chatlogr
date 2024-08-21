@@ -1,3 +1,6 @@
+#' @importFrom yyjsonr read_json_file
+NULL
+
 get_matching_col_names <- function(dat, patterns = c("chathistory")) {
     pattern <- unique(patterns)
     matched <- c()
@@ -23,8 +26,9 @@ check_if_file_exist <- function() {
 
 #' Read csv file to get matching data columns
 #'
-#' @param csv_file Path to csv file in character.
-#' @param idcol ID column in character.
+#' @param csv_file Path to csv file in character. Defaults to NULL.
+#' @param dat Dataframe/tibble. Defaults to NULL.
+#' @param idcol ID column in character. Defaults to NULL.
 #' @param chat_col_patterns Patterns to match chat columns in character. Defaults to "chathistory".
 #' @param chat_cols Chat columns in character. Defaults to "".
 #'
@@ -35,15 +39,28 @@ check_if_file_exist <- function() {
 #'
 #' @examples
 #' csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-#' dat <- read_relevant_data_columns(csv_file, "vs", "mpg", "cyl")
-read_relevant_data_columns <- function(csv_file,
-                                       idcol,
+#' dat <- read_relevant_data_columns(csv_file, idcol = "vs", chat_col_patterns = "mpg")
+read_relevant_data_columns <- function(csv_file = NULL,
+                                       dat = NULL,
+                                       idcol = NULL,
                                        chat_col_patterns = c("chathistory"),
                                        chat_cols = "") {
     if (length(idcol) > 1) {
         stop("idcol must be a single column name")
     }
-    dat <- readr::read_csv(csv_file, show_col_types = FALSE)
+
+    if (is.null(csv_file) && is.null(dat)) {
+        stop("csv_file or dat must be provided")
+    }
+
+    if (!is.null(dat) && !is.null(csv_file)) {
+        stop("Only one of csv_file or dat should be provided")
+    }
+
+    if (!is.null(csv_file)) {
+        dat <- readr::read_csv(csv_file, show_col_types = FALSE)
+    }
+
     chat_cols1 <- c()
     if (chat_col_patterns[1] != "") {
         chat_cols1 <- get_matching_col_names(dat, chat_col_patterns)
@@ -79,9 +96,17 @@ read_relevant_data_columns <- function(csv_file,
 #'
 #' @examples
 #' csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-#' user_chat_data <- read_relevant_data_columns(csv_file, "user_id", "chathistory")[1, ]
-#' user_chatdata <- parse_user_chat_data(user_chat_data, "vs", join_str = '\"\"')
+#' user_chat_data <- read_relevant_data_columns(csv_file, idcol = "user_id")[3, ]
+#' user_chatdata <- parse_user_chat_data(user_chat_data, user_id = 3)
 parse_user_chat_data <- function(user_chat_data, user_id, join_str = '\"\"', verbose = TRUE) {
+
+    if (!is.data.frame(user_chat_data)) {
+        stop("user_chat_data must be a data frame")
+    }
+
+    if (nrow(user_chat_data) != 1) {
+        stop("user_chat_data must have only one row")
+    }
 
     # remove columns with NA
     user_chat_data <- user_chat_data[, colSums(!is.na(user_chat_data)) > 0]
@@ -162,7 +187,8 @@ ensure_chat_columns_are_char <- function(dat, idcol) {
 
 #' Parse all user data
 #'
-#' @param csv_file Path to csv file in character.
+#' @param csv_file Path to csv file in character. Defaults to NULL.
+#' @param dat Dataframe/tibble with raw chat data in one or more columns. Defaults to NULL.
 #' @param idcol Name of column that is the user ID column in character. Must contain unique values.
 #' @param chat_col_patterns Patterns to match chat columns in character. Defaults to "chathistory".
 #' @param chat_cols Chat columns in character. Defaults "".
@@ -187,16 +213,25 @@ ensure_chat_columns_are_char <- function(dat, idcol) {
 #'
 #' @examples
 #' csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-#' chatdata <- parse_users_chat_data(csv_file, "user_id")
-parse_users_chat_data <- function(csv_file,
-                       idcol = "ResponseId",
-                       chat_col_patterns = c("chathistory"),
-                       chat_cols = "",
-                       join_str = '\"\"',
-                       nrows = Inf,
-                       verbose = FALSE) {
+#' chatdata <- parse_users_chat_data(csv_file, idcol = "user_id")
+parse_users_chat_data <- function(csv_file = NULL,
+                           dat = NULL,
+                           idcol = "ResponseId",
+                           chat_col_patterns = c("chathistory"),
+                           chat_cols = "",
+                           join_str = '\"\"',
+                           nrows = Inf,
+                           verbose = FALSE) {
 
-    dat <- read_relevant_data_columns(csv_file, idcol, chat_col_patterns, chat_cols)
+    if (is.null(dat) & is.null(csv_file)) {
+        stop("Either csv_file (path) or dat (dataframe) must be provided")
+    }
+
+    if (!is.null(dat) & !is.null(csv_file)) {
+        stop("Only one of csv_file or dat should be provided")
+    }
+
+    dat <- read_relevant_data_columns(csv_file, dat, idcol, chat_col_patterns, chat_cols)
 
     if (!check_unique_ids(dat, idcol)) {
         stop("idcol must contain unique values")
@@ -290,7 +325,7 @@ parse_users_chat_data <- function(csv_file,
 #'
 #' @importFrom yyjsonr write_json_file
 #'
-#' @return TRUE if successful.
+#' @return The input chatdata.
 #' @export
 #'
 #' @examples
@@ -303,8 +338,9 @@ write_to_json <- function(chatdata, output_file) {
     }
     message(paste0("Writing all chat data to ", output_file))
     yyjsonr::write_json_file(chatdata, output_file)
-    return(TRUE)
+    return(chatdata)
 }
+
 
 
 
@@ -315,10 +351,9 @@ write_to_json <- function(chatdata, output_file) {
 #' @param chatdata Chat data from parse_users_chat_data.
 #' @param output_file Output file name. Must end with '.csv'.
 #'
-#' @importFrom dplyr bind_rows
 #' @importFrom readr write_csv
 #'
-#' @return TRUE if successful.
+#' @return Dataframe/tibble that was saved to csv.
 #' @export
 #'
 #' @examples
@@ -330,9 +365,9 @@ write_to_csv <- function(chatdata, output_file) {
         stop("output_file must end with '.csv'")
     }
     message(paste0("Writing only chat history to ", output_file))
-    df0 <- dplyr::bind_rows(chatdata$df_fail, chatdata$df_success)
+    df0 <- get_df(chatdata)
     readr::write_csv(df0, output_file)
-    return(TRUE)
+    return(df0)
 }
 
 
@@ -346,7 +381,7 @@ write_to_csv <- function(chatdata, output_file) {
 #'
 #' @examples
 #' csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-#' chatdata <- parse_users_chat_data(csv_file, "user_id")
+#' chatdata <- parse_users_chat_data(csv_file, idcol = "user_id")
 #' get_success_ids(chatdata)
 get_success_ids <- function(chatdata) {
     return(unique(chatdata$df_success[[1]]))
@@ -363,7 +398,7 @@ get_success_ids <- function(chatdata) {
 #'
 #' @examples
 #' csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-#' chatdata <- parse_users_chat_data(csv_file, "user_id", nrows = 5)
+#' chatdata <- parse_users_chat_data(csv_file, idcol = "user_id", nrows = 5)
 #' get_failed_ids(chatdata)
 get_failed_ids <- function(chatdata) {
     return(unique(chatdata$df_fail[[1]]))
@@ -373,11 +408,33 @@ get_failed_ids <- function(chatdata) {
 
 
 
+#' Get chat history as dataframe
+#'
+#' Rows that cannot be parsed are at the top, and rows that parsed successfully are at the bottom.
+#'
+#' @param chatdata Chat data from parse_users_chat_data.
+#'
+#' @importFrom dplyr bind_rows
+#'
+#' @return A dataframe/tibble.
+#' @export
+#'
+#' @examples
+#' csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
+#' chatdata <- parse_users_chat_data(csv_file, idcol = "user_id", nrows = 5)
+#' get_df(chatdata)
+get_df <- function(chatdata) {
+    df0 <- dplyr::bind_rows(chatdata$df_fail, chatdata$df_success)
+    return(df0)
+}
+
+
+
 
 
 #' Get and view chat history of a user
 #'
-#' @param chatdata Chat data from parse_users_chat_data.
+#' @param chatdata Chat data list object from parse_users_chat_data or chat history dataframe.
 #' @param user_id A user ID in character. Default is NULL.
 #' @param random_user A logical value. If TRUE, a random user will be selected. Default is FALSE.
 #'
@@ -387,9 +444,15 @@ get_failed_ids <- function(chatdata) {
 #' @export
 #'
 #' @examples
+#' # read and process raw data
 #' csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-#' chatdata <- parse_users_chat_data(csv_file, "user_id")
+#' chatdata <- parse_users_chat_data(csv_file, idcol = "user_id")
+#'
+#' # pass in chatdata list object
 #' get_user_chat(chatdata, user_id = 1)
+#'
+#' # pass in chat history dataframe
+#' get_user_chat(chatdata$df_success, user_id = 1)
 get_user_chat <- function(chatdata, user_id = NULL, random_user = FALSE) {
     if (is.null(user_id) && !random_user) {
         stop("Please provide a user_id or set random_user = TRUE")
@@ -397,29 +460,41 @@ get_user_chat <- function(chatdata, user_id = NULL, random_user = FALSE) {
         user_id <- sample(get_success_ids(chatdata), 1)
     }
 
-    if (is.null(chatdata$json_list[[user_id]])) {
-        stop(paste0("User ", user_id, " not found"))
-    }
-
-    success <- chatdata$json_list[[user_id]]$status
-    if (success == "success") {
-        chathistory <- chatdata$df_success
+    if (is.list(chatdata) & "json_list" %in% names(chatdata)) {
+        if (is.null(chatdata$json_list[[user_id]])) {
+            stop(paste0("User ", user_id, " not found"))
+        }
+        success <- chatdata$json_list[[user_id]]$status
+        if (success == "success") {
+            chathistory <- chatdata$df_success
+        } else {
+            chathistory <- chatdata$df_fail
+        }
+        idcol <- colnames(chathistory)[1]
+        chathistory <- chathistory[chathistory[[idcol]] == user_id, ]
+        if (nrow(chathistory) == 0) {
+            message(paste0("No chat history for user ", user_id))
+            return(chathistory)
+        }
+    } else if (is.data.frame(chatdata)) {
+        chathistory <- tibble::tibble(chatdata)
+        matched_rows <- rowSums(chathistory == user_id) > 0
+        chathistory <- chathistory[matched_rows, ]
     } else {
-        chathistory <- chatdata$df_fail
+        stop("chatdata must be a list object or a dataframe")
     }
 
-    idcol <- colnames(chathistory)[1]
-    chathistory <- chathistory[chathistory[[idcol]] == user_id, ]
-
-    if (nrow(chathistory) == 0) {
-        message(paste0("No chat history for user ", user_id))
-        return(chathistory)
+    if (!all(c("role", "content") %in% colnames(chathistory))) {
+        print(chathistory)
+        stop("chatdata must contain role and content columns")
     }
 
     message(paste0("Chat history for user ", user_id, "\n--------------------"))
     for (i in 1:nrow(chathistory)) {
         role <- chathistory[i, ]$role
-        role <- paste0(role, " (", chathistory[i,]$n_words, " words)")
+        if ("n_words" %in% colnames(chathistory)) {
+            role <- paste0(role, " (", chathistory[i,]$n_words, " words)")
+        }
         content <- chathistory[i,]$content
         if (grepl("system", role)) {
             cat(crayon::red(paste0(role, ": ", content, "\n\n")))

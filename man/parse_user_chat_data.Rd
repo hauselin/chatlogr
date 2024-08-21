@@ -28,6 +28,6 @@ Parse a single user's raw chat data
 }
 \examples{
 csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-user_chat_data <- read_relevant_data_columns(csv_file, "user_id", "chathistory")[1, ]
-user_chatdata <- parse_user_chat_data(user_chat_data, "vs", join_str = '\"\"')
+user_chat_data <- read_relevant_data_columns(csv_file, idcol = "user_id")[3, ]
+user_chatdata <- parse_user_chat_data(user_chat_data, user_id = 3)
 }

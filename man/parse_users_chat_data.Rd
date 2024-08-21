@@ -5,7 +5,8 @@
 \title{Parse all user data}
 \usage{
 parse_users_chat_data(
-  csv_file,
+  csv_file = NULL,
+  dat = NULL,
   idcol = "ResponseId",
   chat_col_patterns = c("chathistory"),
   chat_cols = "",
@@ -15,7 +16,9 @@ parse_users_chat_data(
 )
 }
 \arguments{
-\item{csv_file}{Path to csv file in character.}
+\item{csv_file}{Path to csv file in character. Defaults to NULL.}
+
+\item{dat}{Dataframe/tibble with raw chat data in one or more columns. Defaults to NULL.}
 
 \item{idcol}{Name of column that is the user ID column in character. Must contain unique values.}
 
@@ -44,5 +47,5 @@ Parse all user data
 }
 \examples{
 csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-chatdata <- parse_users_chat_data(csv_file, "user_id")
+chatdata <- parse_users_chat_data(csv_file, idcol = "user_id")
 }

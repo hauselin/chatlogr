@@ -17,6 +17,6 @@ Get ids whose data have been parsed sucessfully
 }
 \examples{
 csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-chatdata <- parse_users_chat_data(csv_file, "user_id")
+chatdata <- parse_users_chat_data(csv_file, idcol = "user_id")
 get_success_ids(chatdata)
 }

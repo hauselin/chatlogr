@@ -33,12 +33,11 @@ remotes::install_github("hauselin/chatlogr")
 ## Usage
 
 ```{r eval=FALSE}
-# load library
-library(chatlogr)
+library(chatlogr)  # load library
 
 # parse data
 chatdata <- parse_users_chat_data(
-    "data.csv",  # data file
+    csv_file = "data.csv",  # data file (or provide a dataframe via dat parameter)
     idcol = "ResponseId",  # unique id column in data
     chat_col_patterns = c("chathistory"),  # columns containing chat history
     nrows = 10  # number of rows to parse (fewer for debugging/testing)
@@ -69,15 +68,38 @@ get_success_ids(chatdata)
 # get failed userids
 get_failed_ids(chatdata)
 
-# get chat history for a specific user
-get_user_chat(chatdata, "R_7PQRDkwCKlhLGhP")
-# prints chat history for user with id "R_7PQRDkwCKlhLGhP"
-# returns a tibble dataframe for this user
+# get long-form chat history (success and failed) for all users
+get_df(chatdata)
+
+# get/view chat history for a specific a userid
+get_user_chat(chatdata, "R_13GYa78PPEossy5")  # accepts chatdata from parse_users_chat_data
+get_user_chat(chatdata$df_success, "R_13GYa78PPEossy5")  # accepts a dataframe
+# prints chat history for that userid
+# returns a tibble dataframe for that userid
 ```
 
 ## Parse with `parse_users_chat_data()`
 
-Parse a raw CSV file downloaded from Qualtrics with the `parse_users_chat_data()` function. 
+The `parse_users_chat_data()` function has several parameters that can be adjusted to suit the specific format of the chat data. 
+
+```{r eval=FALSE}
+parse_users_chat_data(
+    csv_file,  # path to CSV file
+    idcol = "your_unique_ID_column", 
+    chat_col_patterns = c("chathistory"), # get columns with names containing this pattern
+    chat_cols = c("chathistory00", "chathistory01"),  # specify exact column names to parse
+    nrows = 10  # rows to read (for debugging/testing initially)
+)
+```
+
+You can parse a raw CSV file downloaded or a processed data frame that is already in R.
+
+```{r eval=FALSE} 
+chatdata <- parse_users_chat_data(csv_file = "file.csv")
+chatdata <- parse_users_chat_data(dat = some_data_frame)
+```
+
+If you run into issues, try parsing the raw CSV file (instead of a processed data/file) with the `csv_file` parameter.
 
 ```{r eval=FALSE}
 csv_file <- "qualtrics_data.csv"
@@ -118,8 +140,6 @@ chatdata$df_success
 #    <chr>             <chr>     <chr>                                  <dbl> <int>   <int>
 #  1 R_6CTNF27UPvt8oKX system    "You are an engaging and persuasi…      0        0     344
 #  2 R_6CTNF27UPvt8oKX user      "The issue of 'Role of federal go…      0.1      1      95
-#  3 R_6CTNF27UPvt8oKX assistant "It’s great that you’re thinking …      1.99     2     477
-#  4 R_6CTNF27UPvt8oKX user      "thank you for explaining"             42.9      3       4
 
 # tibble dataframe with failed parsing
 chatdata$df_fail 
@@ -128,30 +148,17 @@ chatdata$df_fail
 #    <chr>                          <chr> <chr>                         <dbl> <int>   <int>
 #  1 "Response ID"                  NA    "Chat history will be sa…        NA    NA     315
 #  2 "{\"ImportId\":\"_recordId\"}" NA    "{\"ImportId\":\"QID84_T…        NA    NA      10
-#  3 "R_6Oxfp8hPdB4oOJQ"            NA    ""                               NA    NA       0
 ```
 
-### Parsing parameters
-
-The `parse_users_chat_data()` function has several parameters that can be adjusted to suit the specific format of the chat data. 
-
-```{r eval=FALSE}
-parse_users_chat_data(
-    csv_file,  # path to CSV file
-    idcol = "your_unique_ID_column", 
-    chat_col_patterns = c("chathistory"), # get columns with names containing this pattern
-    chat_cols = c("chathistory00", "chathistory01"),  # specify exact column names to parse
-    nrows = 10  # rows to read (for debugging/testing initially)
-)
-
-```
-
-## Saving data
+## Saving and reading data
 
 ```{r eval=FALSE}
 # chatdata is the list returned by parse_users_chat_data()
 # save the FULL chatdata object (with extra parameters) to JSON file
 write_to_json(chatdata, "chatdata.json")
+
+# read the JSON file back into R
+chatdata <- read_json_file("chatdata.json")
 
 # chatdata is the list returned by parse_users_chat_data()
 # saves ONLY CHAT MESSAGES/HISTORY to CSV file

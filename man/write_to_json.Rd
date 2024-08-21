@@ -12,7 +12,7 @@ write_to_json(chatdata, output_file)
 \item{output_file}{Output file name. Must end with '.json'.}
 }
 \value{
-TRUE if successful.
+The input chatdata.
 }
 \description{
 Write chat data to json file

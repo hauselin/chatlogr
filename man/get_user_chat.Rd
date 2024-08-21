@@ -7,7 +7,7 @@
 get_user_chat(chatdata, user_id = NULL, random_user = FALSE)
 }
 \arguments{
-\item{chatdata}{Chat data from parse_users_chat_data.}
+\item{chatdata}{Chat data list object from parse_users_chat_data or chat history dataframe.}
 
 \item{user_id}{A user ID in character. Default is NULL.}
 
@@ -20,7 +20,13 @@ Chat history of a user in a tibble.
 Get and view chat history of a user
 }
 \examples{
+# read and process raw data
 csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-chatdata <- parse_users_chat_data(csv_file, "user_id")
+chatdata <- parse_users_chat_data(csv_file, idcol = "user_id")
+
+# pass in chatdata list object
 get_user_chat(chatdata, user_id = 1)
+
+# pass in chat history dataframe
+get_user_chat(chatdata$df_success, user_id = 1)
 }

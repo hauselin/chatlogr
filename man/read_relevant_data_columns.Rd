@@ -5,16 +5,19 @@
 \title{Read csv file to get matching data columns}
 \usage{
 read_relevant_data_columns(
-  csv_file,
-  idcol,
+  csv_file = NULL,
+  dat = NULL,
+  idcol = NULL,
   chat_col_patterns = c("chathistory"),
   chat_cols = ""
 )
 }
 \arguments{
-\item{csv_file}{Path to csv file in character.}
+\item{csv_file}{Path to csv file in character. Defaults to NULL.}
 
-\item{idcol}{ID column in character.}
+\item{dat}{Dataframe/tibble. Defaults to NULL.}
+
+\item{idcol}{ID column in character. Defaults to NULL.}
 
 \item{chat_col_patterns}{Patterns to match chat columns in character. Defaults to "chathistory".}
 
@@ -28,5 +31,5 @@ Read csv file to get matching data columns
 }
 \examples{
 csv_file <- file.path(system.file("extdata", package = "chatlogr"), "mtcars.csv")
-dat <- read_relevant_data_columns(csv_file, "vs", "mpg", "cyl")
+dat <- read_relevant_data_columns(csv_file, idcol = "vs", chat_col_patterns = "mpg")
 }

@@ -12,7 +12,7 @@ write_to_csv(chatdata, output_file)
 \item{output_file}{Output file name. Must end with '.csv'.}
 }
 \value{
-TRUE if successful.
+Dataframe/tibble that was saved to csv.
 }
 \description{
 Write only chat history to csv file. Does not include other information contained in the full chat data. To save the full chat data, use `write_to_json()`.
