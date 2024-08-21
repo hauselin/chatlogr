@@ -370,16 +370,16 @@ write_to_csv <- function(chatdata, output_file) {
 
 
 
-#' Read JSON file
+#' Read json file
 #'
-#' @param filename Path to JSON file in character.
+#' @param filename Path to json file in character.
 #' @param opts Options to pass to `yyjsonr::read_json_file`.
 #' @param ... Additional arguments to pass to `yyjsonr::read_json_file`.
 #'
 #' @description
 #' This function is imported from yyjsonr.
 #'
-#' @return A list of JSON data.
+#' @return A list of json data.
 #'
 #' @seealso [yyjsonr::read_json_file()]
 #' @examples

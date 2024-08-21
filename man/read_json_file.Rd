@@ -2,19 +2,19 @@
 % Please edit documentation in R/chatlogr.R
 \name{read_json_file}
 \alias{read_json_file}
-\title{Read JSON file}
+\title{Read json file}
 \usage{
 read_json_file(filename, opts = list(), ...)
 }
 \arguments{
-\item{filename}{Path to JSON file in character.}
+\item{filename}{Path to json file in character.}
 
 \item{opts}{Options to pass to `yyjsonr::read_json_file`.}
 
 \item{...}{Additional arguments to pass to `yyjsonr::read_json_file`.}
 }
 \value{
-A list of JSON data.
+A list of json data.
 }
 \description{
 This function is imported from yyjsonr.
