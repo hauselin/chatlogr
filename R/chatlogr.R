@@ -322,7 +322,7 @@ parse_users_chat_data <- function(csv_file = NULL,
 #'
 #' @importFrom yyjsonr write_json_file
 #'
-#' @return The input chatdata.
+#' @return TRUE if successful
 #' @export
 #'
 #' @examples
@@ -335,7 +335,7 @@ write_to_json <- function(chatdata, output_file) {
     }
     message(paste0("Writing all chat data to ", output_file))
     yyjsonr::write_json_file(chatdata, output_file)
-    return(chatdata)
+    return(TRUE)
 }
 
 
@@ -350,7 +350,7 @@ write_to_json <- function(chatdata, output_file) {
 #'
 #' @importFrom readr write_csv
 #'
-#' @return Dataframe/tibble that was saved to csv.
+#' @return TRUE if successful
 #' @export
 #'
 #' @examples
@@ -364,7 +364,7 @@ write_to_csv <- function(chatdata, output_file) {
     message(paste0("Writing only chat history to ", output_file))
     df0 <- get_df(chatdata)
     readr::write_csv(df0, output_file)
-    return(df0)
+    return(TRUE)
 }
 
 
