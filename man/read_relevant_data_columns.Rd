@@ -21,7 +21,7 @@ read_relevant_data_columns(
 
 \item{chat_col_patterns}{Patterns to match chat columns in character. Defaults to "chathistory".}
 
-\item{chat_cols}{Chat columns in character. Defaults to "".}
+\item{chat_cols}{Chat columns in character. Defaults to "". If specified, overwrites chat_col_patterns.}
 }
 \value{
 Dataframe/tibble with matching columns.

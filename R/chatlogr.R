@@ -27,7 +27,7 @@ check_if_file_exist <- function() {
 #' @param dat Dataframe/tibble. Defaults to NULL.
 #' @param idcol ID column in character. Defaults to NULL.
 #' @param chat_col_patterns Patterns to match chat columns in character. Defaults to "chathistory".
-#' @param chat_cols Chat columns in character. Defaults to "".
+#' @param chat_cols Chat columns in character. Defaults to "". If specified, overwrites chat_col_patterns.
 #'
 #' @importFrom readr read_csv
 #'
@@ -42,6 +42,11 @@ read_relevant_data_columns <- function(csv_file = NULL,
                                        idcol = NULL,
                                        chat_col_patterns = c("chathistory"),
                                        chat_cols = "") {
+
+    if (chat_cols[1] != "") {
+        chat_col_patterns <- ""
+    }
+
     if (length(idcol) > 1) {
         stop("idcol must be a single column name")
     }
@@ -188,7 +193,7 @@ ensure_chat_columns_are_char <- function(dat, idcol) {
 #' @param dat Dataframe/tibble with raw chat data in one or more columns. Defaults to NULL.
 #' @param idcol Name of column that is the user ID column in character. Must contain unique values.
 #' @param chat_col_patterns Patterns to match chat columns in character. Defaults to "chathistory".
-#' @param chat_cols Chat columns in character. Defaults "".
+#' @param chat_cols Chat columns in character. Defaults "".  If specified, overwrites chat_col_patterns.
 #' @param join_str Join string in character. Defaults to '\"\"'.
 #' @param nrows Number of rows to process. Defaults to Inf. Use fewer rows to debug the function/parser.
 #' @param verbose Whether to print processing status. Defaults to FALSE.

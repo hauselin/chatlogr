@@ -24,7 +24,7 @@ parse_users_chat_data(
 
 \item{chat_col_patterns}{Patterns to match chat columns in character. Defaults to "chathistory".}
 
-\item{chat_cols}{Chat columns in character. Defaults "".}
+\item{chat_cols}{Chat columns in character. Defaults "".  If specified, overwrites chat_col_patterns.}
 
 \item{join_str}{Join string in character. Defaults to '\"\"'.}
 
