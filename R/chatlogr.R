@@ -72,8 +72,14 @@ read_relevant_data_columns <- function(csv_file = NULL,
         chat_cols2 <- chat_cols
     }
     unique_chat_cols <- sort(unique(c(chat_cols1, chat_cols2)))
-    l <- unique_chat_cols[unique_chat_cols != ""]
+    unique_chat_cols <- unique_chat_cols[unique_chat_cols != ""]
+    if (length(unique_chat_cols) == 0) {
+        return(data.frame())
+    }
     dat <- get_available_df_columns(dat, c(idcol, unique_chat_cols))
+    if (ncol(dat) == 0) {
+        return(data.frame())
+    }
     return(dat)
 }
 
@@ -225,6 +231,12 @@ parse_users_chat_data <- function(csv_file = NULL,
                            nrows = Inf,
                            verbose = FALSE) {
 
+    if (!is.null(csv_file)) {
+        if (!file.exists(csv_file)) {
+            stop("csv_file does not exist")
+        }
+    }
+
     if (is.null(dat) & is.null(csv_file)) {
         stop("Either csv_file (path) or dat (dataframe) must be provided")
     }
@@ -234,12 +246,18 @@ parse_users_chat_data <- function(csv_file = NULL,
     }
 
     dat <- read_relevant_data_columns(csv_file, dat, idcol, chat_col_patterns, chat_cols)
+    if (ncol(dat) == 0) {
+        stop("No matching columns found.")
+    }
 
     if (!check_unique_ids(dat, idcol)) {
         stop("idcol must contain unique values")
     }
 
     dat <- remove_na_chat_columns(dat)
+    if (ncol(dat) == 0) {
+        stop("No matching columns found.")
+    }
 
     if (!ensure_chat_columns_are_char(dat, idcol)) {
         stop("All chat data columns must be character")
